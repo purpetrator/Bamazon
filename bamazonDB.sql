@@ -10,7 +10,7 @@ CREATE TABLE products (
   department_name VARCHAR(45) NULL,
   price INT default 1,
   stock_quantity INT default 1,
-  PRIMARY KEY (id)
+  PRIMARY KEY (item_id)
 );
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
