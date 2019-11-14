@@ -1,0 +1,23 @@
+{
+  "name": "hw10-bamazon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/purpetrator/Bamazon.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/purpetrator/Bamazon/issues"
+  },
+  "homepage": "https://github.com/purpetrator/Bamazon#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "inquirer": "^7.0.0"
+  }
+}
