@@ -170,7 +170,49 @@ function addInventory() {
   });
 }
 
-function addNewProduct() {}
+function addNewProduct() {
+  // * If a manager selects `Add New Product`, it should allow the manager to add a completely new product to the store.
+  inquirer
+    .prompt([
+      {
+        name: "newName",
+        type: "input",
+        message: "\nNEW PRODUCT ENTRY \nEnter product name: \n"
+      },
+      {
+        name: "newDept",
+        type: "input",
+        message: "\nEnter product department: \n"
+      },
+      {
+        name: "newPrice",
+        type: "input",
+        message: "\nEnter product price: \n"
+      },
+      {
+        name: "newQty",
+        type: "input",
+        message: "\nEnter product quantity: \n"
+      }
+    ])
+    .then(function(answer) {
+      var newProductName = answer.newName;
+      var newProductDept = answer.newDept;
+      var newProductPrice = answer.newPrice;
+      var newProductQty = answer.newQty;
+
+      connection.query(
+        "INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES (?, ?, ?, ?)",
+        [newProductName, newProductDept, newProductPrice, newProductQty],
+
+        function(err, res) {
+          if (err) throw err;
+          console.log("\nNew product was successfully added!\n");
+          mainMenu();
+        }
+      );
+    });
+}
 
 function mainMenu() {
   inquirer
