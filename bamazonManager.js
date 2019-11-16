@@ -90,7 +90,85 @@ function lowInventory() {
   );
 }
 
-function addInventory() {}
+function addInventory() {
+  connection.query("SELECT * FROM products", function(err, res) {
+    if (err) throw err;
+    // console.log(res);
+
+    // Display the table first
+    console.log("-----------------------------------");
+    for (var i = 0; i < res.length; i++) {
+      console.log(
+        res[i].item_id +
+          " - " +
+          res[i].product_name +
+          " - " +
+          res[i].department_name +
+          " - " +
+          "$" +
+          res[i].price +
+          " - " +
+          "qty: " +
+          res[i].stock_quantity
+      );
+    }
+    console.log("-----------------------------------\n");
+
+    inquirer
+      .prompt([
+        {
+          name: "addQuantity",
+          type: "rawlist",
+          message:
+            "\nWhich product would you like to add more of? Please select by ID.",
+          choices: function() {
+            var productsArray = [];
+            for (var i = 0; i < res.length; i++) {
+              productsArray.push(res[i].item_id);
+            }
+            return productsArray;
+          }
+        },
+        {
+          type: "input",
+          name: "qtyProduct",
+          message: "\nPlease enter the quantity you would like to add: "
+        }
+      ])
+      .then(function(answer) {
+        // console.log(answer);
+        var chosenItem;
+        for (var i = 0; i < res.length; i++) {
+          if (res[i].item_id === answer.addQuantity) {
+            chosenItem = res[i];
+          }
+        }
+
+        var newQty =
+          parseInt(chosenItem.stock_quantity) + parseInt(answer.qtyProduct);
+
+        console.log("\n\nNew Quantity: " + newQty + "\n\n");
+
+        connection.query(
+          "UPDATE products SET ? WHERE ?",
+          [
+            {
+              stock_quantity: newQty
+            },
+            {
+              item_id: chosenItem.item_id
+            }
+          ],
+          function(error) {
+            if (error) {
+              console.log(error);
+            }
+            mainMenu();
+          }
+        );
+      });
+  });
+}
 
 function addNewProduct() {}
 
