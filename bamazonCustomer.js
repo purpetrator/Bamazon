@@ -17,8 +17,7 @@ connection.connect(function(err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId + "\n");
   displayAllItems();
-  buyProduct();
-  connection.end();
+  // buyProduct();
 });
 
 function displayAllItems() {
@@ -40,8 +39,45 @@ function displayAllItems() {
           res[i].stock_quantity
       );
     }
-    console.log("-----------------------------------");
+    console.log("-----------------------------------\n");
+    start();
   });
+}
+
+function start() {
+  inquirer
+    .prompt({
+      name: "buyOrExit",
+      type: "list",
+      message: "Would you like to buy an item or exit?",
+      choices: ["BUY", "EXIT"]
+    })
+    .then(function(answer) {
+      // based on their answer, either call the bid or the post functions
+      if (answer.buyOrExit === "BUY") {
+        buyProduct();
+      } else if (answer.buyOrExit === "EXIT") {
+        connection.end();
+      }
+    });
+}
+
+function restart() {
+  inquirer
+    .prompt({
+      name: "buyAnother",
+      type: "list",
+      message: "Would you like to buy another item?",
+      choices: ["YES", "NO"]
+    })
+    .then(function(answer) {
+      // based on their answer, either call the bid or the post functions
+      if (answer.buyAnother === "YES") {
+        buyProduct();
+      } else if (answer.buyAnother === "NO") {
+        connection.end();
+      }
+    });
 }
 
 function buyProduct() {
@@ -73,37 +109,44 @@ function buyProduct() {
       .then(function(answer) {
         // console.log(answer);
         var chosenItem;
-        for (var i = 1; i < res.length; i++) {
+        for (var i = 0; i < res.length; i++) {
           if (res[i].item_id === answer.whichProduct) {
             chosenItem = res[i];
           }
         }
 
-        console.log("stock qty: " + chosenItem.stock_quantity);
-        // if (chosenItem.stock_quantity > parseInt(answer.qtyProduct)) {
-        //   // bid was high enough, so update db, let the user know, and start over
-        //   connection.query(
-        //     "UPDATE products SET ? WHERE ?",
-        //     [
-        //       {
-        //         stock_quantity: chosenItem.stock_quantity - answer.qtyProduct
-        //       },
-        //       {
-        //         item_id: chosenItem.item_id
-        //       }
-        //     ],
-        //     function(cb) {
-        //       console.log(cb);
+        if (chosenItem.stock_quantity > answer.qtyProduct) {
+          console.log("Great, we have enough in stock.\n");
+          // bid was high enough, so update db, let the user know, and start over
+          var newQty =
+            parseInt(chosenItem.stock_quantity) - parseInt(answer.qtyProduct);
 
-        //       console.log("Purchase logged successfully!");
-        //       //   start();
-        //     }
-        //   );
-        // } else {
-        //   // bid wasn't high enough, so apologize and start over
-        //   console.log("Not enough in stock...");
-        //   //   start();
-        // }
+          connection.query(
+            "UPDATE products SET ? WHERE ?",
+            [
+              {
+                stock_quantity: newQty
+              },
+              {
+                item_id: chosenItem.item_id
+              }
+            ],
+            function(error) {
+              if (error) {
+                console.log(error);
+              }
+              // * Once the update goes through, show the customer the total cost of their purchase.
+              var purchPrice = chosenItem.price * parseInt(answer.qtyProduct);
+
+              console.log("Your purchase total is $" + purchPrice + "\n");
+              restart();
+            }
+          );
+        } else {
+          // bid wasn't high enough, so apologize and start over
+          console.log("Sorry, not enough in stock...\n");
+          restart();
+        }
       });
   });
 }
