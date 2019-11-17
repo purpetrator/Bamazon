@@ -1,7 +1,8 @@
-var mysql = require("mysql");
 require("dotenv").config();
+var mysql = require("mysql");
 var inquirer = require("inquirer");
 var Table = require("cli-table3");
+var chalk = require("chalk");
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -30,7 +31,7 @@ function displayAllItems() {
       colWidths: [5, 17, 17, 10, 10]
     });
 
-    // console.log("-----------------------------------");
+    console.log(chalk.cyan.bold("Bamazon Store"));
     for (var i = 0; i < res.length; i++) {
       table.push([
         res[i].item_id,
@@ -41,7 +42,6 @@ function displayAllItems() {
       ]);
     }
     console.log(table.toString());
-    // console.log("-----------------------------------\n");
     start();
   });
 }
@@ -51,7 +51,7 @@ function start() {
     .prompt({
       name: "buyOrExit",
       type: "list",
-      message: "Would you like to buy an item or exit?",
+      message: chalk.bold("Would you like to buy an item or exit?"),
       choices: ["BUY", "EXIT"]
     })
     .then(function(answer) {
@@ -118,7 +118,7 @@ function buyProduct() {
         }
 
         if (chosenItem.stock_quantity > answer.qtyProduct) {
-          console.log("Great, we have enough in stock.\n");
+          console.log(chalk.green("\nGreat, we have enough in stock.\n"));
           // bid was high enough, so update db, let the user know, and start over
           var newQty =
             parseInt(chosenItem.stock_quantity) - parseInt(answer.qtyProduct);
@@ -140,13 +140,15 @@ function buyProduct() {
               // * Once the update goes through, show the customer the total cost of their purchase.
               var purchPrice = chosenItem.price * parseInt(answer.qtyProduct);
 
-              console.log("Your purchase total is $" + purchPrice + "\n");
+              console.log(
+                chalk.bold("Your purchase total is $" + purchPrice + "\n")
+              );
               restart();
             }
           );
         } else {
           // bid wasn't high enough, so apologize and start over
-          console.log("Sorry, not enough in stock...\n");
+          console.log(chalk.red("\nSorry, not enough in stock...\n"));
           restart();
         }
       });

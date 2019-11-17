@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/purpetrator/Bamazon#readme",
   "dependencies": {
+    "chalk": "^3.0.0",
     "cli-table3": "^0.5.1",
     "dotenv": "^8.2.0",
     "inquirer": "^7.0.0",
