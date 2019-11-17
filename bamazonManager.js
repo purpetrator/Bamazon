@@ -1,6 +1,7 @@
 var mysql = require("mysql");
 require("dotenv").config();
 var inquirer = require("inquirer");
+var Table = require("cli-table3");
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -56,35 +57,43 @@ function firstQ() {
 function displayAllItems() {
   connection.query("SELECT * FROM products", function(err, res) {
     if (err) throw err;
-    console.log("-----------------------------------");
+
+    var table = new Table({
+      head: ["ID", "Product", "Department", "Price", "Stock"],
+      colWidths: [5, 17, 17, 10, 10]
+    });
+
     for (var i = 0; i < res.length; i++) {
-      console.log(
-        res[i].item_id +
-          " - " +
-          res[i].product_name +
-          " - " +
-          res[i].department_name +
-          " - " +
-          "$" +
-          res[i].price +
-          " - " +
-          "qty: " +
-          res[i].stock_quantity
-      );
+      table.push([
+        res[i].item_id,
+        res[i].product_name,
+        res[i].department_name,
+        "$" + res[i].price,
+        res[i].stock_quantity
+      ]);
     }
-    console.log("-----------------------------------\n");
+    console.log(table.toString());
     mainMenu();
   });
 }
 
 function lowInventory() {
-  // * If a manager selects `View Low Inventory`, then it should list all items with an inventory count lower than five.
   connection.query(
     "SELECT product_name, stock_quantity FROM products WHERE stock_quantity BETWEEN 0 AND 5",
 
     function(err, res) {
       if (err) throw err;
-      console.log(res);
+
+      var table = new Table({
+        head: ["Product", "Stock"],
+        colWidths: [17, 10]
+      });
+
+      for (var i = 0; i < res.length; i++) {
+        table.push([res[i].product_name, res[i].stock_quantity]);
+      }
+
+      console.log(table.toString());
       mainMenu();
     }
   );
@@ -96,23 +105,21 @@ function addInventory() {
     // console.log(res);
 
     // Display the table first
-    console.log("-----------------------------------");
+    var table = new Table({
+      head: ["ID", "Product", "Department", "Price", "Stock"],
+      colWidths: [5, 17, 17, 10, 10]
+    });
+
     for (var i = 0; i < res.length; i++) {
-      console.log(
-        res[i].item_id +
-          " - " +
-          res[i].product_name +
-          " - " +
-          res[i].department_name +
-          " - " +
-          "$" +
-          res[i].price +
-          " - " +
-          "qty: " +
-          res[i].stock_quantity
-      );
+      table.push([
+        res[i].item_id,
+        res[i].product_name,
+        res[i].department_name,
+        "$" + res[i].price,
+        res[i].stock_quantity
+      ]);
     }
-    console.log("-----------------------------------\n");
+    console.log(table.toString());
 
     inquirer
       .prompt([
