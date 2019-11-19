@@ -16,15 +16,12 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
   if (err) throw err;
-  console.log("connected as id " + connection.threadId);
   firstQ();
-  //   connection.end();
 });
 
 function firstQ() {
   connection.query("SELECT * FROM products", function(err, res) {
     if (err) throw err;
-    // console.log(res);
 
     inquirer
       .prompt([
