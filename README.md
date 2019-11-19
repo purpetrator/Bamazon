@@ -5,6 +5,7 @@
 This application is a Node.js and MySQL app that is run in the command line. This app mimics an online store and offers two dashboard views: 'Customer View' and 'Manager View'.
 
 > Demo (Customer View): [Watch Here](https://drive.google.com/file/d/1dVZijph996qtKUzzVElYRsgyzsUpsHl8/view)
+
 > Demo (Manager View): [Watch Here](https://drive.google.com/file/d/1iGX8wrWeULhgjs9IQ1Cowo14vSfBUFNF/view)
 
 > Repository: [See Here](https://github.com/purpetrator/Bamazon)
@@ -51,15 +52,15 @@ node bamazonManager.js
 Running the customer application will display the user with a table of all products available for purchase.
 The user is asked if they would like to purchase an item. If so, the user is prompted to select the product by its ID and to specify how many units they would like to buy.
 
-![](https://ibb.co/ZzRFwWx)
+![](https://i.ibb.co/GQf81cR/1.png)
 
 The app checks our database to see if there is enough inventory to fulfill the order. If not, the user is alerted that there is not enough stock.
 
-![](https://ibb.co/VwrHpBB)
+![](https://i.ibb.co/FHNsq77/2.png)
 
 If our store does have sufficient stock, the user is shown their order total, the order is fulfilled, and the database is updated to reflect the remaining quantity available.
 
-![](https://ibb.co/ZzRFwWx)
+![](https://i.ibb.co/hFHkFvG/3.png)
 
 #### Manager View
 
