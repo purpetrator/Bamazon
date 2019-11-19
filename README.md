@@ -66,6 +66,8 @@ If our store does have sufficient stock, the user is shown their order total, th
 
 Running the manager application will display a main menu which offers the user the following options:
 
+![](https://i.ibb.co/mJPSFFF/4.png)
+
 ###### View Products for Sale
 
 This displays a table of all products currently in stock.
@@ -74,13 +76,19 @@ This displays a table of all products currently in stock.
 
 This displays a table of all products with a stock quantity of 5 or fewer.
 
+![](https://i.ibb.co/s1W9QTv/5.png)
+
 ###### Add to Inventory
 
 This allows the user to add more of any item currently in the store. This change is reflected in our database.
 
+![](https://i.ibb.co/2s6GKRM/6.png)
+
 ###### Add New Product
 
 This allows the user to add a completely new product to the store.
+
+![](https://i.ibb.co/fvDST2Y/6.png)
 
 ### Technologies Used
 
